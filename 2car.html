@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renta de Carros - Nuestra Flota</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Applying Inter font to the body */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better aesthetics */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-900">
+                <a href="#">CarRent</a>
+            </div>
+            <div>
+                <a href="#" class="px-4 text-gray-700 hover:text-blue-600">Inicio</a>
+                <a href="#" class="px-4 text-gray-700 font-semibold text-blue-600 border-b-2 border-blue-600">Vehículos</a>
+                <a href="#" class="px-4 text-gray-700 hover:text-blue-600">Contacto</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="container mx-auto px-6 py-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Nuestra Flota de Vehículos</h1>
+        <p class="text-gray-600 mb-8">Explora nuestra amplia selección de vehículos disponibles para ti.</p>
+
+        <!-- Table Container -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full whitespace-nowrap" id="vehicles-table">
+                    <thead class="bg-gray-200 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                        <!-- Table headers will be inserted here by JavaScript -->
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <!-- Table rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-white mt-12 py-6">
+        <div class="container mx-auto px-6 text-center text-gray-600">
+            <p>&copy; 2025 CarRent. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript to fetch CSV data and populate the table
+
+        // Raw CSV data from the uploaded file is stored in this variable.
+        const csvData = `CÓDIGO;MARCA;MODELO;FOTO;CAPACIDAD;TIPO VEHICULO;AÑO DEL MODELO
+ABARTH-500C;ABARTH;500C;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2005
+ABARTH-500;ABARTH;500;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2017
+ALFA ROMEO-Giulietta;ALFA ROMEO;Giulietta;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2004
+ALFA ROMEO-MiTo;ALFA ROMEO;MiTo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2013
+ALFA ROMEO-4C;ALFA ROMEO;4C;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2012
+ALFA ROMEO (FIAT)-4C;ALFA ROMEO (FIAT);4C;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2008
+ASTON MARTIN-DB9;ASTON MARTIN;DB9;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2014
+ASTON MARTIN-Vantage V8;ASTON MARTIN;Vantage V8;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2017
+ASTON MARTIN-Vanquish;ASTON MARTIN;Vanquish;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2011
+ASTON MARTIN-Vantage V12;ASTON MARTIN;Vantage V12;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;limusina;2005
+ASTON MARTIN-Rapide;ASTON MARTIN;Rapide;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2005
+AUDI-A4;AUDI;A4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2005
+AUDI-A8;AUDI;A8;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2006
+AUDI-A3;AUDI;A3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2013
+AUDI-TT;AUDI;TT;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2017
+AUDI-A5;AUDI;A5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2005
+AUDI-A4 Allroad Quattro;AUDI;A4 Allroad Quattro;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;casa rodante;2015
+AUDI-A6;AUDI;A6;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2017
+AUDI-A7;AUDI;A7;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2008
+AUDI-Q3;AUDI;Q3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2006
+AUDI-Q5;AUDI;Q5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2006
+AUDI-S5;AUDI;S5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2004
+AUDI-A1;AUDI;A1;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2012
+AUDI-A6 allroad quattro;AUDI;A6 allroad quattro;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2011
+AUDI-S7;AUDI;S7;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2013
+AUDI-S6;AUDI;S6;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2004
+AUDI-S8;AUDI;S8;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2011
+AUDI-RS4;AUDI;RS4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2007
+AUDI-RS5;AUDI;RS5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2006
+AUDI-R8;AUDI;R8;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2016
+AUDI-SQ5;AUDI;SQ5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2012
+AUDI-Q7;AUDI;Q7;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2010
+AUDI-RS6;AUDI;RS6;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2012
+AUDI-RS7;AUDI;RS7;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2014
+AUDI-RS Q3;AUDI;RS Q3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;casa rodante;2015
+AUDI-S3;AUDI;S3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2005
+AUDI-S1;AUDI;S1;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2009
+AUDI-TTS;AUDI;TTS;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2009
+AUDI-S4;AUDI;S4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2013
+AUDI-RS3;AUDI;RS3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2017
+BENTLEY-Continental GT;BENTLEY;Continental GT;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2005
+BENTLEY-Mulsanne;BENTLEY;Mulsanne;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2008
+BENTLEY-Flying Spur;BENTLEY;Flying Spur;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2009
+BENTLEY-Continental GTC;BENTLEY;Continental GTC;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2014
+BMW-Serie 3;BMW;Serie 3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2008
+BMW-Serie 5;BMW;Serie 5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2015
+BMW-Serie 4;BMW;Serie 4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2008
+BMW-Serie 7;BMW;Serie 7;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2004
+BMW-Z4;BMW;Z4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2012
+BMW-X5;BMW;X5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2012
+BMW-Serie 1;BMW;Serie 1;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2017
+BMW-X3;BMW;X3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2007
+MERCEDES-Clase SL;MERCEDES;Clase SL;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2012
+MERCEDES-Clase SLK;MERCEDES;Clase SLK;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2006
+MERCEDES-Clase V;MERCEDES;Clase V;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2012
+MERCEDES-Clase C;MERCEDES;Clase C;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2013
+MERCEDES-Clase M;MERCEDES;Clase M;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2008
+MERCEDES-Clase G;MERCEDES;Clase G;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2012
+MERCEDES-Clase E;MERCEDES;Clase E;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2007
+MERCEDES-Clase CL;MERCEDES;Clase CL;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2013
+MERCEDES-Clase S;MERCEDES;Clase S;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2012
+MERCEDES-Clase GLK;MERCEDES;Clase GLK;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2013
+MERCEDES-SLS AMG;MERCEDES;SLS AMG;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2010
+MERCEDES-Clase B;MERCEDES;Clase B;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2015
+MERCEDES-Clase A;MERCEDES;Clase A;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2004
+MERCEDES-Clase GL;MERCEDES;Clase GL;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2013
+MERCEDES-Clase CLS;MERCEDES;Clase CLS;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2010
+MERCEDES-Clase CLA;MERCEDES;Clase CLA;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2011
+MERCEDES-Clase GLA;MERCEDES;Clase GLA;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2017
+MERCEDES-AMG GT;MERCEDES;AMG GT;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2008
+MERCEDES-Vito;MERCEDES;Vito;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2005
+MERCEDES-Clase GLE Coupé;MERCEDES;Clase GLE Coupé;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;casa rodante;2011
+MERCEDES-Clase GLE;MERCEDES;Clase GLE;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2005
+MINI-MINI;MINI;MINI;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2010
+MINI-COUNTRYMAN;MINI;COUNTRYMAN;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2012
+MINI-PACEMAN;MINI;PACEMAN;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2015
+MITSUBISHI-Montero;MITSUBISHI;Montero;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;ambulancia;2017
+MITSUBISHI-i-MiEV;MITSUBISHI;i-MiEV;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2007
+MITSUBISHI-ASX;MITSUBISHI;ASX;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2006
+MITSUBISHI-Outlander;MITSUBISHI;Outlander;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2008
+MITSUBISHI-Space Star;MITSUBISHI;Space Star;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2015
+MITSUBISHI-L200;MITSUBISHI;L200;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2009
+MORGAN-Roadster;MORGAN;Roadster;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2011
+MORGAN-Plus 8;MORGAN;Plus 8;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2010
+MORGAN-Plus 4;MORGAN;Plus 4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2007
+MORGAN-4/4;MORGAN;4/4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2014
+NISSAN-X-TRAIL;NISSAN;X-TRAIL;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2010
+NISSAN-QASHQAI;NISSAN;QASHQAI;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2015
+NISSAN-NOTE;NISSAN;NOTE;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2012
+NISSAN-LEAF;NISSAN;LEAF;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2014
+NISSAN-Pathfinder;NISSAN;Pathfinder;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2007
+NISSAN-EVALIA;NISSAN;EVALIA;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;casa rodante;2004
+NISSAN-Navara;NISSAN;Navara;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2012
+NISSAN-Micra;NISSAN;Micra;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2013
+NISSAN-JUKE;NISSAN;JUKE;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2004
+NISSAN-370Z;NISSAN;370Z;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2009
+NISSAN-NV200;NISSAN;NV200;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2006
+NISSAN-GT-R;NISSAN;GT-R;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2011
+NISSAN-PULSAR;NISSAN;PULSAR;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2009
+NISSAN-Murano;NISSAN;Murano;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2012
+OPEL-Corsa;OPEL;Corsa;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2011
+OPEL-Astra;OPEL;Astra;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2005
+OPEL-Meriva;OPEL;Meriva;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;limusina;2011
+OPEL-Zafira Tourer;OPEL;Zafira Tourer;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2004
+OPEL-Zafira;OPEL;Zafira;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2014
+OPEL-Insignia;OPEL;Insignia;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2010
+OPEL-Combo;OPEL;Combo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2014
+OPEL-Ampera;OPEL;Ampera;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2008
+OPEL-Mokka;OPEL;Mokka;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2007
+OPEL-Adam;OPEL;Adam;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2016
+OPEL-Cabrio;OPEL;Cabrio;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2008
+OPEL-Antara;OPEL;Antara;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;ambulancia;2014
+OPEL-Karl;OPEL;Karl;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2006
+PEUGEOT-308;PEUGEOT;308;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2009
+PEUGEOT-807;PEUGEOT;807;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2008
+PEUGEOT-Bipper;PEUGEOT;Bipper;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2007
+PEUGEOT-508;PEUGEOT;508;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2016
+PEUGEOT-Partner;PEUGEOT;Partner;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2008
+PEUGEOT-3008;PEUGEOT;3008;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2016
+PEUGEOT-208;PEUGEOT;208;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2009
+PEUGEOT-2008;PEUGEOT;2008;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2006
+PEUGEOT-RCZ;PEUGEOT;RCZ;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2013
+PEUGEOT-5008;PEUGEOT;5008;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2005
+PEUGEOT-4008;PEUGEOT;4008;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2013
+PEUGEOT-108;PEUGEOT;108;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2011
+PEUGEOT-207;PEUGEOT;207;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2013
+PEUGEOT-ion;PEUGEOT;ion;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2004
+PORSCHE-911;PORSCHE;911;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2010
+PORSCHE-Boxster;PORSCHE;Boxster;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2013
+PORSCHE-Cayenne;PORSCHE;Cayenne;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2015
+PORSCHE-Panamera;PORSCHE;Panamera;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2017
+PORSCHE-918;PORSCHE;918;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2017
+PORSCHE-Macan;PORSCHE;Macan;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2007
+PORSCHE-Cayman;PORSCHE;Cayman;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2009
+RENAULT-Fluence;RENAULT;Fluence;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2012
+RENAULT-Grand Scénic;RENAULT;Grand Scénic;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2013
+RENAULT-Latitude;RENAULT;Latitude;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2006
+RENAULT-Clio;RENAULT;Clio;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2014
+RENAULT-Scénic;RENAULT;Scénic;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2009
+RENAULT-Laguna;RENAULT;Laguna;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2009
+RENAULT-Kangoo Combi;RENAULT;Kangoo Combi;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2014
+RENAULT-Mégane;RENAULT;Mégane;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2015
+RENAULT-Grand Kangoo Combi;RENAULT;Grand Kangoo Combi;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2014
+RENAULT-Captur;RENAULT;Captur;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2009
+RENAULT-ZOE;RENAULT;ZOE;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2011
+RENAULT-Koleos;RENAULT;Koleos;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2009
+RENAULT-Twingo;RENAULT;Twingo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2011
+RENAULT-Espace;RENAULT;Espace;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2011
+RENAULT-Kadjar;RENAULT;Kadjar;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2010
+ROLLS-ROYCE-Phantom;ROLLS-ROYCE;Phantom;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2006
+SEAT-Ibiza;SEAT;Ibiza;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2012
+SEAT-Nuevo León;SEAT;Nuevo León;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2013
+SEAT-Alhambra;SEAT;Alhambra;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;ambulancia;2006
+SEAT-Altea;SEAT;Altea;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2013
+SEAT-Mii;SEAT;Mii;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2010
+SEAT-Toledo;SEAT;Toledo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2004
+SEAT-Altea XL;SEAT;Altea XL;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2009
+SKODA-Octavia;SKODA;Octavia;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2012
+SKODA-Fabia;SKODA;Fabia;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2011
+SKODA-Roomster;SKODA;Roomster;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2005
+SKODA-Yeti;SKODA;Yeti;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2014
+SKODA-Superb;SKODA;Superb;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2012
+SKODA-Citigo;SKODA;Citigo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2010
+SKODA-Rapid;SKODA;Rapid;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2009
+SKODA-Spaceback;SKODA;Spaceback;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2017
+SKODA-Scout;SKODA;Scout;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;limusina;2017
+SMART-Fortwo;SMART;Fortwo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2014
+SMART-Forfour;SMART;Forfour;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;ambulancia;2010
+SSANGYONG-Rexton;SSANGYONG;Rexton;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2004
+SSANGYONG-Rodius;SSANGYONG;Rodius;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2011
+SSANGYONG-Korando;SSANGYONG;Korando;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2007
+SSANGYONG-Actyon Sports Pick Up;SSANGYONG;Actyon Sports Pick Up;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2014
+SSANGYONG-Tivoli;SSANGYONG;Tivoli;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2009
+SUBARU-Forester;SUBARU;Forester;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2005
+SUBARU-XV;SUBARU;XV;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2004
+SUBARU-Outback;SUBARU;Outback;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2009
+SUBARU-BRZ;SUBARU;BRZ;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2012
+SUBARU-WRX STI;SUBARU;WRX STI;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2017
+SUZUKI-Grand Vitara;SUZUKI;Grand Vitara;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2009
+SUZUKI-Swift;SUZUKI;Swift;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2004
+SUZUKI-SX4;SUZUKI;SX4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2013
+SUZUKI-Jimny;SUZUKI;Jimny;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2005
+SUZUKI-SX4 S-Cross;SUZUKI;SX4 S-Cross;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2007
+SUZUKI-Celerio;SUZUKI;Celerio;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2014
+SUZUKI-Kizashi;SUZUKI;Kizashi;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2009
+SUZUKI-Vitara;SUZUKI;Vitara;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2005
+TATA-Xenon;TATA;Xenon;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2013
+TATA-Aria;TATA;Aria;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2010
+TATA-Vista;TATA;Vista;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2006
+TOYOTA-Avensis;TOYOTA;Avensis;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2006
+TOYOTA-Land Cruiser;TOYOTA;Land Cruiser;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2010
+TOYOTA-Yaris;TOYOTA;Yaris;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2011
+TOYOTA-Verso;TOYOTA;Verso;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2009
+TOYOTA-Auris;TOYOTA;Auris;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2004
+TOYOTA-Prius+;TOYOTA;Prius+;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2017
+TOYOTA-GT86;TOYOTA;GT86;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;casa rodante;2006
+TOYOTA-Prius;TOYOTA;Prius;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2017
+TOYOTA-Rav4;TOYOTA;Rav4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2016
+TOYOTA-Aygo;TOYOTA;Aygo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2010
+TOYOTA-Hilux;TOYOTA;Hilux;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2009
+TOYOTA-Land Cruiser 200;TOYOTA;Land Cruiser 200;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2013
+VOLKSWAGEN-Polo;VOLKSWAGEN;Polo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2006
+VOLKSWAGEN-Jetta;VOLKSWAGEN;Jetta;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2017
+VOLKSWAGEN-Phaeton;VOLKSWAGEN;Phaeton;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2012
+VOLKSWAGEN-Golf;VOLKSWAGEN;Golf;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2004
+VOLKSWAGEN-Touran;VOLKSWAGEN;Touran;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2016
+BMW-Serie 6;BMW;Serie 6;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2016
+BMW-X1;BMW;X1;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2016
+BMW-X6;BMW;X6;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2009
+BMW-i3;BMW;i3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2011
+BMW-Serie 2;BMW;Serie 2;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2011
+BMW-X4;BMW;X4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2010
+BMW-i8;BMW;i8;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2006
+BMW-Serie 2 Gran Tourer;BMW;Serie 2 Gran Tourer;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2013
+BMW-Serie 2 Active Tourer;BMW;Serie 2 Active Tourer;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2009
+BYD-E6;BYD;E6;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2004
+CHEVROLET-Cruze;CHEVROLET;Cruze;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2016
+CHEVROLET-Aveo;CHEVROLET;Aveo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2012
+CHEVROLET-Trax;CHEVROLET;Trax;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2012
+CHEVROLET-Orlando;CHEVROLET;Orlando;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;casa rodante;2014
+CHEVROLET-Spark;CHEVROLET;Spark;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2015
+CHEVROLET-Camaro;CHEVROLET;Camaro;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2011
+CITROEN-C4;CITROEN;C4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2015
+CITROEN-C3;CITROEN;C3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2011
+CITROEN-C5;CITROEN;C5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2010
+CITROEN-C3 Picasso;CITROEN;C3 Picasso;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2005
+CITROEN-C4 Picasso;CITROEN;C4 Picasso;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2012
+CITROEN-Grand C4 Picasso;CITROEN;Grand C4 Picasso;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2012
+CITROEN-C4 Aircross;CITROEN;C4 Aircross;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2009
+CITROEN-Nemo;CITROEN;Nemo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2017
+CITROEN-Berlingo;CITROEN;Berlingo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2004
+CITROEN-C-Elysée;CITROEN;C-Elysée;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2007
+CITROEN-C4 Cactus;CITROEN;C4 Cactus;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2017
+CITROEN-C1;CITROEN;C1;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2004
+CITROEN-C-Zero;CITROEN;C-Zero;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2008
+DACIA-Logan;DACIA;Logan;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2014
+DACIA-Lodgy;DACIA;Lodgy;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2016
+DACIA-Sandero;DACIA;Sandero;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2013
+DACIA-Duster;DACIA;Duster;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;limusina;2016
+DACIA-Dokker;DACIA;Dokker;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2004
+DFSK-Serie V;DFSK;Serie V;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2008
+DFSK-Serie K;DFSK;Serie K;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2005
+DS-DS 4;DS;DS 4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2010
+DS-DS 5;DS;DS 5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2013
+DS-DS 3;DS;DS 3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2013
+FERRARI-458;FERRARI;458;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2014
+FERRARI-FF;FERRARI;FF;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2010
+FERRARI-F12;FERRARI;F12;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2009
+FERRARI-California;FERRARI;California;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2004
+FIAT-Freemont;FIAT;Freemont;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2004
+FIAT-Doblò;FIAT;Doblò;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2005
+FIAT-Punto;FIAT;Punto;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2016
+FIAT-Panda;FIAT;Panda;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2007
+FIAT-500;FIAT;500;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2016
+FIAT-500L;FIAT;500L;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2005
+FIAT-500X;FIAT;500X;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2006
+FIAT-Qubo;FIAT;Qubo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2015
+FIAT-Fiorino;FIAT;Fiorino;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2015
+FIAT-Bravo;FIAT;Bravo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2004
+FIAT (FIAT)-Bravo;FIAT (FIAT);Bravo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2015
+FIAT (FIAT)-Fiorino;FIAT (FIAT);Fiorino;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2006
+FORD-C-Max;FORD;C-Max;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2015
+FORD-Fiesta;FORD;Fiesta;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2016
+FORD-Focus;FORD;Focus;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2015
+FORD-Mondeo;FORD;Mondeo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2012
+FORD-Ka;FORD;Ka;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;rústico;2012
+FORD-S-MAX;FORD;S-MAX;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2007
+FORD-B-MAX;FORD;B-MAX;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2015
+FORD-Grand C-Max;FORD;Grand C-Max;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2015
+FORD-Tourneo Custom;FORD;Tourneo Custom;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2012
+FORD-Kuga;FORD;Kuga;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2006
+FORD-Galaxy;FORD;Galaxy;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2011
+FORD-Grand Tourneo Connect;FORD;Grand Tourneo Connect;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2017
+FORD-Tourneo Connect;FORD;Tourneo Connect;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2016
+FORD-EcoSport;FORD;EcoSport;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2012
+FORD-Tourneo Courier;FORD;Tourneo Courier;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2007
+FORD-Mustang;FORD;Mustang;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2012
+FORD-Transit Connect;FORD;Transit Connect;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;limusina;2005
+HONDA-Accord;HONDA;Accord;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2004
+HONDA-Jazz;HONDA;Jazz;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2008
+HONDA-Civic;HONDA;Civic;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2004
+HONDA-CR-V;HONDA;CR-V;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2011
+HYUNDAI-i20;HYUNDAI;i20;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;casa rodante;2012
+HYUNDAI-ix35;HYUNDAI;ix35;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2017
+HYUNDAI-ix20;HYUNDAI;ix20;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2012
+HYUNDAI-i10;HYUNDAI;i10;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2007
+HYUNDAI-Santa Fe;HYUNDAI;Santa Fe;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2014
+HYUNDAI-Veloster;HYUNDAI;Veloster;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2012
+HYUNDAI-i40;HYUNDAI;i40;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2015
+HYUNDAI-Elantra;HYUNDAI;Elantra;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2005
+HYUNDAI-i30;HYUNDAI;i30;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2010
+HYUNDAI-Grand Santa Fe;HYUNDAI;Grand Santa Fe;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2006
+HYUNDAI-Genesis;HYUNDAI;Genesis;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2010
+HYUNDAI-H-1 Travel;HYUNDAI;H-1 Travel;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2013
+INFINITI-Q70;INFINITI;Q70;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2016
+INFINITI-Q50;INFINITI;Q50;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2016
+INFINITI-QX70;INFINITI;QX70;https://www.mazda.es/Canvas/all-new-showroom/mazd6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2017
+INFINITI-QX50;INFINITI;QX50;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2010
+INFINITI-Q60;INFINITI;Q60;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2010
+ISUZU-D-Max;ISUZU;D-Max;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2012
+JAGUAR-XF;JAGUAR;XF;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2017
+JAGUAR-Serie XK;JAGUAR;Serie XK;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2008
+JAGUAR-F-Type;JAGUAR;F-Type;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2014
+JAGUAR-XJ;JAGUAR;XJ;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2011
+JAGUAR-XE;JAGUAR;XE;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2016
+JEEP-Grand Cherokee;JEEP;Grand Cherokee;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;ambulancia;2009
+JEEP-Wrangler Unlimited;JEEP;Wrangler Unlimited;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2012
+JEEP-Cherokee;JEEP;Cherokee;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2009
+JEEP-Wrangler;JEEP;Wrangler;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2007
+JEEP-Renegade;JEEP;Renegade;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2016
+JEEP (FIAT)-Wrangler Unlimited;JEEP (FIAT);Wrangler Unlimited;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2005
+JEEP (FIAT)-Wrangler;JEEP (FIAT);Wrangler;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2009
+JEEP (FIAT)-Cherokee;JEEP (FIAT);Cherokee;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2010
+KIA-Picanto;KIA;Picanto;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2008
+KIA-Rio;KIA;Rio;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2008
+KIA-Sportage;KIA;Sportage;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2011
+KIA-Venga;KIA;Venga;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2017
+KIA-Optima;KIA;Optima;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2012
+KIA-cee'd;KIA;cee'd;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2008
+KIA-cee'd Sportswagon;KIA;cee'd Sportswagon;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2017
+KIA-Carens;KIA;Carens;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;limusina;2005
+KIA-pro_cee'd;KIA;pro_cee'd;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2005
+KIA-Sorento;KIA;Sorento;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2016
+KIA-Soul;KIA;Soul;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2004
+LADA-4X4;LADA;4X4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2010
+LADA-Priora;LADA;Priora;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2007
+LAMBORGHINI-Aventador;LAMBORGHINI;Aventador;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2009
+LAMBORGHINI-Huracán;LAMBORGHINI;Huracán;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2004
+LANCIA-Ypsilon;LANCIA;Ypsilon;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2010
+LANCIA-Voyager;LANCIA;Voyager;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2009
+LANCIA (FIAT)-Thema;LANCIA (FIAT);Thema;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2009
+LANCIA (FIAT)-Delta;LANCIA (FIAT);Delta;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;convertible;2016
+LAND ROVER-Defender;LAND ROVER;Defender;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;sedan;2009
+LAND ROVER-Discovery 4;LAND ROVER;Discovery 4;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2010
+LAND ROVER-Range Rover;LAND ROVER;Range Rover;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2007
+LAND ROVER-Range Rover Evoque;LAND ROVER;Range Rover Evoque;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2010
+LAND ROVER-Freelander;LAND ROVER;Freelander;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2006
+LAND ROVER-Range Rover Sport;LAND ROVER;Range Rover Sport;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2005
+LAND ROVER-Discovery Sport;LAND ROVER;Discovery Sport;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;fúnebre;2016
+LEXUS-GS;LEXUS;GS;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2006
+LEXUS-RX;LEXUS;RX;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2008
+LEXUS-CT;LEXUS;CT;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2008
+LEXUS-IS;LEXUS;IS;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;compacto;2010
+LEXUS-NX;LEXUS;NX;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;limusina;2016
+LEXUS-RC;LEXUS;RC;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2006
+LEXUS-LS;LEXUS;LS;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2013
+MAHINDRA-XUV500;MAHINDRA;XUV500;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2007
+MASERATI-GranCabrio;MASERATI;GranCabrio;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2015
+MASERATI-Quattroporte;MASERATI;Quattroporte;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;deportivo;2007
+MASERATI-Ghibli;MASERATI;Ghibli;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2007
+MASERATI-GranTurismo;MASERATI;GranTurismo;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2016
+MAZDA-Mazda2;MAZDA;Mazda2;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2005
+MAZDA-CX-5;MAZDA;CX-5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;ambulancia;2013
+MAZDA-Mazda6;MAZDA;Mazda6;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2004
+MAZDA-MX-5;MAZDA;MX-5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;convertible;2014
+MAZDA-Mazda3;MAZDA;Mazda3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;ambulancia;2008
+MAZDA-Mazda5;MAZDA;Mazda5;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;ambulancia;2004
+MAZDA-CX-9;MAZDA;CX-9;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2005
+MAZDA-CX-3;MAZDA;CX-3;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;sedan;2006
+VOLKSWAGEN-Touareg;VOLKSWAGEN;Touareg;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2016
+VOLKSWAGEN-Beetle;VOLKSWAGEN;Beetle;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2013
+VOLKSWAGEN-Sharan;VOLKSWAGEN;Sharan;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2007
+VOLKSWAGEN-Tiguan;VOLKSWAGEN;Tiguan;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;fúnebre;2013
+VOLKSWAGEN-Multivan;VOLKSWAGEN;Multivan;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;sedan;2007
+VOLKSWAGEN-California;VOLKSWAGEN;California;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;ambulancia;2008
+VOLKSWAGEN-Caravelle;VOLKSWAGEN;Caravelle;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;rústico;2012
+VOLKSWAGEN-up!;VOLKSWAGEN;up!;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2007
+VOLKSWAGEN-CC;VOLKSWAGEN;CC;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;fúnebre;2016
+VOLKSWAGEN-Golf Sportsvan;VOLKSWAGEN;Golf Sportsvan;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;casa rodante;2009
+VOLKSWAGEN-Amarok;VOLKSWAGEN;Amarok;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2004
+VOLKSWAGEN-Caddy;VOLKSWAGEN;Caddy;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;rústico;2016
+VOLKSWAGEN-Transporter;VOLKSWAGEN;Transporter;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2016
+VOLKSWAGEN-Scirocco;VOLKSWAGEN;Scirocco;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;limusina;2005
+VOLKSWAGEN-Passat;VOLKSWAGEN;Passat;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;casa rodante;2005
+VOLKSWAGEN-Eos;VOLKSWAGEN;Eos;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2008
+VOLVO-V70;VOLVO;V70;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;convertible;2010
+VOLVO-S80;VOLVO;S80;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;deportivo;2014
+VOLVO-XC70;VOLVO;XC70;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;compacto;2006
+VOLVO-V60;VOLVO;V60;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;deportivo;2014
+VOLVO-S60;VOLVO;S60;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;camioneta;2006
+VOLVO-XC90;VOLVO;XC90;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;camioneta;2014
+VOLVO-XC60;VOLVO;XC60;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;camioneta;2015
+VOLVO-V40;VOLVO;V40;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;4;limusina;2005
+VOLVO-V40 Cross Country;VOLVO;V40 Cross Country;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;compacto;2012
+VOLVO-V60 Cross Country;VOLVO;V60 Cross Country;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;6;limusina;2004
+VOLVO-S60 Cross Country;VOLVO;S60 Cross Country;https://www.mazda.es/Canvas/all-new-showroom/mazda6-IPM-saloon/l10n/master/Gallery/images/LHD/desktop/design/01.jpg;5;casa rodante;2016`;
+
+        /**
+         * Parses the raw CSV string into an object with headers and data rows.
+         * @param {string} csvText - The raw CSV data as a string.
+         * @returns {{headers: string[], rows: string[][]}} An object containing the headers and rows.
+         */
+        function parseCSV(csvText) {
+            // Split the text into lines, handling both \n and \r\n line endings.
+            const lines = csvText.trim().split(/\r?\n/);
+            // The first line is the header.
+            const headers = lines[0].split(';');
+            // The rest of the lines are data rows.
+            const rows = lines.slice(1).map(line => line.split(';'));
+            return { headers, rows };
+        }
+
+        /**
+         * Renders the parsed CSV data into the HTML table.
+         * @param {{headers: string[], rows: string[][]}} data - The parsed CSV data.
+         */
+        function renderTable(data) {
+            const table = document.getElementById('vehicles-table');
+            const thead = table.querySelector('thead');
+            const tbody = table.querySelector('tbody');
+
+            // Clear existing headers and rows
+            thead.innerHTML = '';
+            tbody.innerHTML = '';
+
+            // Create table headers
+            const headerRow = document.createElement('tr');
+            data.headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                th.className = 'px-6 py-3';
+                // The 'FOTO' column is wider to accommodate the image
+                if (headerText.toUpperCase() === 'FOTO') {
+                    th.classList.add('w-32');
+                }
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            // Find the index of the 'FOTO' column to render it as an image
+            const photoIndex = data.headers.findIndex(h => h.toUpperCase() === 'FOTO');
+
+            // Create table rows
+            data.rows.forEach(rowData => {
+                if (rowData.length !== data.headers.length) {
+                    console.warn('Skipping malformed row:', rowData);
+                    return; // Skip rows that don't have the correct number of columns
+                }
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50';
+                
+                rowData.forEach((cellData, index) => {
+                    const td = document.createElement('td');
+                    td.className = 'px-6 py-4';
+                    
+                    if (index === photoIndex) {
+                        // If the column is 'FOTO', create an image element
+                        const img = document.createElement('img');
+                        img.src = cellData;
+                        img.alt = 'Foto del vehículo';
+                        img.className = 'h-12 w-20 object-cover rounded-md';
+                        // Provide a placeholder in case the image fails to load
+                        img.onerror = function() { this.onerror=null; this.src='https://placehold.co/80x48/e2e8f0/64748b?text=Auto'; };
+                        td.appendChild(img);
+                    } else {
+                        td.textContent = cellData;
+                    }
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Execute the functions when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const parsedData = parseCSV(csvData);
+            renderTable(parsedData);
+        });
+
+    </script>
+
+</body>
+</html>
