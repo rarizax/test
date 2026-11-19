@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Explora la pirámide del conocimiento con un caso de gestión de flota de 2CAR.">
+<title>Pirámide del conocimiento | 2CAR</title>
+<style>
+:root{color-scheme:light;--paper:#f1f4f9;--card:#fff;--ink:#16234b;--muted:#4d5b77;--line:#d9e1ed;--blue:#243ca8;--deep:#101b40;--accent:#e0fb8b;--soft:#edf2ff}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink)}
+button{font:inherit;cursor:pointer}
+a{color:#263fb0;text-underline-offset:.18em}
+button:focus-visible,a:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid #3857de;outline-offset:4px}
+.wrap{width:min(1150px,calc(100% - 44px));margin-inline:auto}
+.hero{background:var(--deep);color:white;padding:26px 0 40px;border-bottom:5px solid #c3d7ff}
+.brand{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#cfdbfa;font-size:.84rem;font-weight:700;letter-spacing:.055em}
+.hero h1{font-size:clamp(2.25rem,6vw,4.7rem);line-height:1.01;letter-spacing:-.06em;margin:26px 0 14px;max-width:900px}
+.hero p{font-size:clamp(1rem,2vw,1.17rem);max-width:775px;color:#e0e7fa;margin:0}
+main{padding:26px 0 40px}
+.case{border-left:4px solid #3553c5;padding:2px 0 2px 15px;max-width:900px;margin:0 0 24px;color:var(--muted)}
+.case strong{color:var(--ink)}
+.workbench{display:grid;grid-template-columns:minmax(275px,.85fr) minmax(0,1.15fr);gap:18px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:21px;padding:clamp(16px,3vw,27px);box-shadow:0 5px 15px #12275d08}
+h2,h3,p{margin-top:0}
+h2{font-size:1.45rem;line-height:1.16;letter-spacing:-.025em;margin-bottom:8px}
+h3{font-size:1.1rem;line-height:1.25;margin-bottom:8px}
+.hint,.muted{color:var(--muted)}
+.hint{margin-bottom:17px}
+.pyramid{width:min(100%,395px);margin:19px auto 16px;padding:6px 0;display:grid;justify-items:center;gap:5px}
+.level{position:relative;width:var(--w);min-height:62px;background:transparent;border:0;color:var(--ink);display:grid;align-content:center;justify-items:center;line-height:1.16;isolation:isolate;padding:6px 0}
+.level::before{position:absolute;inset:0;content:"";background:var(--fill);clip-path:polygon(var(--s) 0,calc(100% - var(--s)) 0,100% 100%,0 100%);z-index:-1}
+.level:hover::before{filter:brightness(.94)}
+.level[aria-pressed=true]::before{background:#233a9d}
+.level[aria-pressed=true]{color:white}
+.level strong{font-size:clamp(.88rem,2.2vw,1.09rem)}
+.level small{font-size:.78rem;margin-top:4px}
+.level.top{min-height:91px;align-content:end;padding-bottom:11px}
+.understanding{background:#eef2ff;border-radius:12px;padding:13px 14px;font-size:.94rem;color:#35456e;margin:0}
+.understanding strong{display:block;color:#1a2d73}
+.detail{min-height:425px}
+.step{color:var(--blue);font-size:.83rem;font-weight:800;letter-spacing:.045em;margin:0 0 8px}
+.detail h2{font-size:clamp(1.45rem,3vw,2.1rem);margin-bottom:9px}
+.definition{margin-bottom:17px;color:var(--muted)}
+.table-wrap{overflow-x:auto;margin:9px 0 12px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+caption{text-align:left;color:var(--muted);font-size:.87rem;margin-bottom:7px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--line)}
+th{font-size:.84rem;background:#f0f3fa;line-height:1.3}
+td{font-size:.94rem}
+.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 13px}
+.metric{background:var(--soft);padding:10px;border-radius:11px;line-height:1.3}
+.metric strong{display:block;font-size:clamp(1.2rem,3.2vw,1.8rem);color:var(--blue);letter-spacing:-.03em}
+.metric span{font-size:.86rem;color:var(--muted)}
+.insight{background:#eef5d9;border-radius:11px;padding:11px 13px;margin:12px 0;color:#263813;font-size:.94rem}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.control{border:1px solid #bac8e7;border-radius:9px;background:#fff;color:#263b83;padding:7px 12px;font-weight:700}
+.control:hover{background:#eef2ff}
+.primary{background:#243ca8;color:white;border-color:#243ca8}
+.primary:hover{background:#192e8b}
+.exercise{margin-top:18px}
+.exercise-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:23px}
+.exercise-grid>div+div{border-left:1px solid var(--line);padding-left:23px}
+.feedback{background:#eef2ff;border-radius:11px;padding:11px 13px;margin-top:10px}
+.feedback.good{background:#eaf4d8;color:#264010}
+.feedback p:last-child{margin-bottom:0}
+.choice-list{display:grid;gap:8px;margin:10px 0}
+.choice{background:#fff;color:var(--ink);border:1px solid #b9c6de;border-radius:10px;padding:9px 11px;text-align:left;line-height:1.35}
+.choice:hover,.choice[aria-pressed=true]{background:#eaf0ff;border-color:#4e65bf}
+.source{font-size:.88rem;color:var(--muted);margin:22px 2px 0}
+details{margin-top:18px}
+summary{cursor:pointer;color:#203a9b;font-weight:750}
+details p{margin:8px 0 0}
+[hidden]{display:none!important}
+@media(max-width:760px){.workbench,.exercise-grid{grid-template-columns:1fr}.detail{min-height:auto}.exercise-grid>div+div{border-left:0;border-top:1px solid var(--line);padding:17px 0 0}}
+@media(max-width:390px){.wrap{width:calc(100% - 26px)}.metric-grid{grid-template-columns:1fr}.metric strong{display:inline;margin-right:6px}.level small{font-size:.72rem}}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="wrap">
+<div class="brand"><span>SEMINARIO DE BI CON POWER BI</span><span>2CAR · ALQUILER DE VEHÍCULOS</span></div>
+<h1>De un registro a una decisión</h1>
+<p>Explora la pirámide del conocimiento con 2CAR. Usa los datos de su flota para decidir dónde investigar primero la falta de vehículos listos para alquilar.</p>
+</div>
+</header>
+<main class="wrap">
+<p class="case"><strong>El reto de 2CAR.</strong> La empresa cuenta con 120 vehículos en tres sucursales. Operaciones quiere reducir el tiempo que los vehículos pasan en mantenimiento sin comprometer la seguridad. Con un solo equipo para investigar, ¿por dónde empezarías? Trabajarás con un inventario simulado para esta actividad.</p>
+<div class="workbench">
+<section class="card" aria-labelledby="map-title">
+<h2 id="map-title">Pirámide del conocimiento</h2>
+<p class="hint">Empieza por la base o selecciona cualquier nivel.</p>
+<div class="pyramid" role="group" aria-label="Niveles de la pirámide">
+<button type="button" class="level top" style="--w:47%;--s:50%;--fill:#e0fb8b" data-level="3" aria-pressed="false" aria-controls="level-panel"><strong>Sabiduría</strong><small>¿Qué conviene hacer?</small></button>
+<button type="button" class="level" style="--w:64%;--s:14%;--fill:#ccebdd" data-level="2" aria-pressed="false" aria-controls="level-panel"><strong>Conocimiento</strong><small>¿Qué patrón vemos?</small></button>
+<button type="button" class="level" style="--w:82%;--s:11%;--fill:#c7d8fa" data-level="1" aria-pressed="false" aria-controls="level-panel"><strong>Información</strong><small>¿Qué pasó?</small></button>
+<button type="button" class="level" style="--w:100%;--s:9%;--fill:#d8e1fa" data-level="0" aria-pressed="true" aria-controls="level-panel"><strong>Datos</strong><small>¿Qué se registró?</small></button>
+</div>
+<p class="understanding"><strong>Entendimiento compartido</strong> Operaciones, Taller y Reservas acuerdan cuándo un vehículo cuenta como disponible, qué mejora probarán y cómo medirán su resultado.</p>
+</section>
+<section class="card detail" id="level-panel" aria-labelledby="level-title">
+<div id="level-body" aria-live="polite"></div>
+<div class="actions"><button type="button" class="control primary" id="next-level">Ver información</button><button type="button" class="control" id="download">Descargar CSV de 2CAR</button></div>
+</section>
+</div>
+<section class="card exercise" id="reto" aria-labelledby="challenge-title">
+<h2 id="challenge-title" tabindex="-1">Reto de clase</h2>
+<p class="hint">Clasifica una afirmación y elige qué harías como responsable de Operaciones de 2CAR.</p>
+<div class="exercise-grid">
+<div>
+<h3 id="class-question">¿En qué nivel está esta afirmación?</h3>
+<p>«El día del corte, 24 de los 120 vehículos de 2CAR estaban en mantenimiento».</p>
+<div id="class-choices" class="choice-list" role="group" aria-labelledby="class-question"></div>
+<div id="class-feedback" class="feedback" role="status" hidden></div>
+</div>
+<div>
+<h3 id="decision-question">¿Qué harías primero con el equipo disponible?</h3>
+<div id="decision-choices" class="choice-list" role="group" aria-labelledby="decision-question"></div>
+<div id="decision-feedback" class="feedback" role="status" hidden></div>
+</div>
+</div>
+<details>
+<summary>Práctica guiada en Power BI</summary>
+<p><strong>1. Carga.</strong> Importa el CSV de esta actividad junto con sus encabezados. Verifica que <em>EnMantenimiento</em> sea un número entero. Cada fila representa un vehículo en la fecha de corte. El valor 1 corresponde al estado <em>Mantenimiento</em> y 0 a <em>Disponible</em> o <em>Alquilado</em>.</p>
+<p><strong>2. Resume.</strong> Agrega dos tarjetas con el recuento de <em>IdVehiculo</em> y la suma de <em>EnMantenimiento</em>. En una matriz, coloca <em>Sucursal</em> en filas y agrega el recuento de <em>IdVehiculo</em>, la suma y el promedio de <em>EnMantenimiento</em> como valores. Formatea el promedio como porcentaje. El promedio de un campo 0/1 es la proporción de vehículos que cumplen la condición.</p>
+<p><strong>3. Interpreta.</strong> Comprueba el 20 % global. Identifica la sucursal con mayor número de vehículos en mantenimiento y la que tiene la mayor proporción. Escribe qué investigarías, qué dato adicional pedirías y cómo sabrías si una mejora funcionó.</p>
+</details>
+</section>
+<p class="source">Actividad basada en el caso 2CAR del seminario. El CSV contiene registros simulados para esta práctica. Marco DIKW · <a href="https://journals.sagepub.com/doi/10.1177/0165551506070706" target="_blank" rel="noopener">Jennifer Rowley, <em>The wisdom hierarchy</em> (2007)</a>.</p>
+</main>
+<script>
+"use strict";
+const branches = [
+  {name:"Centro", maintenance:12, available:18, rented:30},
+  {name:"Terminal", maintenance:4, available:16, rented:20},
+  {name:"Aeropuerto", maintenance:8, available:3, rented:9}
+];
+const snapshotDate = "2026-09-30";
+const records = [];
+for (const branch of branches) {
+  const states = [["Mantenimiento",branch.maintenance],["Disponible",branch.available],["Alquilado",branch.rented]];
+  for (const [state, count] of states) {
+    for (let i = 0; i < count; i++) {
+      records.push({
+        id:"V-" + String(records.length + 1).padStart(3,"0"),
+        branch:branch.name,
+        snapshotDate,
+        state,
+        inMaintenance:Number(state === "Mantenimiento")
+      });
+    }
+  }
+}
+const formatPercent = new Intl.NumberFormat("es-CO", {style:"percent", maximumFractionDigits:1});
+const percent = (count, total) => formatPercent.format(count / total);
+const countMaintenance = vehicles => vehicles.reduce((sum, vehicle) => sum + vehicle.inMaintenance, 0);
+const maintenanceTotal = countMaintenance(records);
+function table(caption, headings, rows) {
+  return '<div class="table-wrap"><table><caption>' + caption + '</caption><thead><tr>' +
+    headings.map(heading => '<th scope="col">' + heading + '</th>').join("") +
+    '</tr></thead><tbody>' +
+    rows.map(row => '<tr>' + row.map(cell => '<td>' + cell + '</td>').join("") + '</tr>').join("") +
+    '</tbody></table></div>';
+}
+const levels = [
+  {
+    name:"Datos",
+    title:"Datos · Registrar hechos",
+    definition:"Un dato es un registro. Cada fila del inventario indica el estado de un vehículo en una sucursal al 30 de septiembre de 2026.",
+    example:table("Muestra del inventario al cierre del día",["Vehículo","Sucursal","Estado"],
+      [records[0],records[64],records[111]].map(r => [r.id,r.branch,r.state])) +
+      '<p class="insight"><strong>Control de calidad.</strong> Verifica que cada vehículo aparezca una sola vez en el corte y tenga un solo estado válido.</p>'
+  },
+  {
+    name:"Información",
+    title:"Información · Resumir con contexto",
+    definition:"La información responde una pregunta definida. ¿Qué proporción de la flota estaba en mantenimiento al cierre del día?",
+    example:'<div class="metric-grid"><div class="metric"><strong>' + records.length + '</strong><span>Vehículos en la flota</span></div><div class="metric"><strong>' +
+      maintenanceTotal + '</strong><span>En mantenimiento</span></div><div class="metric"><strong>' +
+      percent(maintenanceTotal,records.length) + '</strong><span>De la flota en mantenimiento</span></div></div>' +
+      '<p class="insight"><strong>Regla de negocio.</strong> Divide los vehículos en mantenimiento entre el total de vehículos en el inventario del mismo corte. El denominador incluye los tres estados.</p>'
+  },
+  {
+    name:"Conocimiento",
+    title:"Conocimiento · Interpretar un patrón",
+    definition:"Centro tiene más vehículos en mantenimiento, pero Aeropuerto tiene la mayor proporción de su flota afectada. La prioridad puede cambiar según preguntes por volumen de trabajo o por disponibilidad relativa.",
+    example:table("Vehículos en mantenimiento por sucursal",["Sucursal","Flota","En mantenimiento","% de la flota"],
+      branches.map(branch => {
+        const vehicles = records.filter(vehicle => vehicle.branch === branch.name);
+        const count = countMaintenance(vehicles);
+        return [branch.name,vehicles.length,count,percent(count,vehicles.length)];
+      })) + '<p class="insight"><strong>Hipótesis.</strong> La proporción de Aeropuerto podría deberse a reparaciones demoradas o a mantenimientos programados para el mismo día. El corte muestra dónde indagar. Para entender la causa, revisa fechas, motivos y órdenes de taller.</p>'
+  },
+  {
+    name:"Sabiduría",
+    title:"Sabiduría · Decidir con criterio",
+    definition:"La sabiduría aplica evidencia, juicio y objetivos para elegir una acción, considerar sus consecuencias y revisar el resultado.",
+    example:'<ol><li><strong>Investiga.</strong> Empieza por Aeropuerto. Revisa si el 40 % se repite en otros días, qué explica la permanencia en taller y si faltaron vehículos para atender reservas.</li><li><strong>Prueba.</strong> Si el problema es la concentración de trabajos programados, escalona el ingreso de vehículos al taller dentro de los plazos técnicos obligatorios.</li><li><strong>Evalúa.</strong> Compara con semanas de demanda similar. Mide días en taller por vehículo y reservas no atendidas por falta de flota. Verifica que se cumpla el plan de mantenimiento antes de ampliar el cambio.</li></ol>' +
+      '<p class="insight"><strong>Valor esperado.</strong> Más reservas atendidas con la flota actual y con el mantenimiento al día.</p>'
+  }
+];
+const levelButtons = [...document.querySelectorAll("[data-level]")];
+const levelBody = document.querySelector("#level-body");
+const next = document.querySelector("#next-level");
+let selectedLevel = 0;
+function showLevel(index) {
+  const level = levels[index];
+  selectedLevel = index;
+  levelBody.innerHTML = '<p class="step">Nivel ' + (index + 1) + ' de 4</p><h2 id="level-title">' + level.title +
+    '</h2><p class="definition">' + level.definition + '</p>' + level.example;
+  for (const button of levelButtons) {
+    button.setAttribute("aria-pressed", String(Number(button.dataset.level) === index));
+  }
+  next.textContent = levels[index + 1] ? "Ver " + levels[index + 1].name.toLowerCase() : "Ir al reto";
+}
+for (const button of levelButtons) {
+  button.addEventListener("click", () => showLevel(Number(button.dataset.level)));
+}
+next.addEventListener("click", () => {
+  if (selectedLevel < levels.length - 1) {
+    showLevel(selectedLevel + 1);
+    return;
+  }
+  document.querySelector("#challenge-title").focus();
+});
+function csvText() {
+  const headings = "IdVehiculo,Sucursal,FechaCorte,Estado,EnMantenimiento";
+  return "\uFEFF" + [headings, ...records.map(record => Object.values(record).join(","))].join("\r\n");
+}
+document.querySelector("#download").addEventListener("click", () => {
+  const url = URL.createObjectURL(new Blob([csvText()], {type:"text/csv;charset=utf-8"}));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "2car-inventario-simulado.csv";
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+function buildChoices(containerId, feedbackId, options) {
+  const container = document.getElementById(containerId);
+  const feedback = document.getElementById(feedbackId);
+  for (const option of options) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "choice";
+    button.textContent = option.label;
+    button.setAttribute("aria-pressed", "false");
+    button.addEventListener("click", () => {
+      for (const sibling of container.children) sibling.setAttribute("aria-pressed", String(sibling === button));
+      feedback.classList.toggle("good", Boolean(option.good));
+      feedback.hidden = false;
+      feedback.textContent = option.feedback;
+    });
+    container.append(button);
+  }
+}
+buildChoices("class-choices","class-feedback",[
+  {label:"Datos",feedback:"Un dato sería el estado de un vehículo específico. La afirmación resume los registros de toda la flota."},
+  {label:"Información",good:true,feedback:"Correcto. La afirmación resume cuántos vehículos estaban en mantenimiento en la fecha de corte."},
+  {label:"Conocimiento",feedback:"Para llegar a conocimiento, compara cómo cambia la proporción por sucursal e interpreta qué diferencia merece investigarse."},
+  {label:"Sabiduría",feedback:"En este caso, la sabiduría aparece cuando eliges una acción, ponderas sus riesgos y acuerdas cómo medirla."}
+]);
+buildChoices("decision-choices","decision-feedback",[
+  {label:"Enviar todo el equipo a Centro por su mayor número de vehículos en taller",feedback:"Centro tiene la mayor carga en unidades. Para priorizar la disponibilidad, compara también la proporción afectada, el tiempo en taller y las reservas no atendidas."},
+  {label:"Revisar el historial de Aeropuerto y validar qué está causando la pérdida de disponibilidad",good:true,feedback:"Es el mejor primer paso. Aeropuerto tiene 8 de 20 vehículos en mantenimiento. Revisar la duración, los motivos y las reservas afectadas permite decidir si hace falta un piloto y qué cambio probar."},
+  {label:"Comprar vehículo adicional para Aeropuerto de inmediato",feedback:"El 40 % corresponde a un solo corte. Antes de invertir, comprueba si falta capacidad de manera recurrente y si un cambio en el proceso de taller puede liberar vehículos."}
+]);
+showLevel(0);
+</script>
+</body>
+</html>
